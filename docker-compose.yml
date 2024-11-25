@@ -1,0 +1,51 @@
+volumes:
+  hemlms_data:
+services:
+  postgres:
+    image: postgres
+    volumes:
+      - hemlms_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=db_hemlms
+      - POSTGRES_PASSWORD=user_hemlms
+      - POSTGRES_DB=db_hemlms
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U db_hemlms -d db_hemlms"]
+      interval: 10s
+      retries: 5
+      start_period: 5s
+    restart: on-failure
+
+  api:
+    restart: on-failure
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: hemlms-backend-build-stage
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/code
+    command: uvicorn src.app.main:app --reload --host 0.0.0.0 --port 5000
+    depends_on:
+      - postgres
+
+  frontend:
+    restart: always
+    build:
+      context: ./lms_vue
+      dockerfile: Dockerfile
+      target: build-stage
+    volumes:
+      - './lms_vue:/app'
+      - '/app/node_modules'
+    ports:
+      - "8080:8080"
+    environment:
+      - CHOKIDAR_USEPOLLING=true 
+      - ./lms_vue:/app
+    command: npm run serve
+    depends_on:
+      - api

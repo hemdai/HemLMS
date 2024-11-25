@@ -1,0 +1,53 @@
+Backend Fastapi, alembic, pydantic, setup -Done
+docker setup -Done
+frontend vue.js,libraries setup -Done
+docker setup -Done
+database setup and docker -Done
+
+backend
+model account -Done
+schema account -Done
+api login-page -Done
+    databse query
+    databse validation
+    return value 
+    
+frontend
+homepage -Done
+aboutpage -Done
+ligin page -Done
+signup page -Done
+
+set up vuex store -Done
+initialize vuex on start up -Done
+Create very basic my account page -Done
+make it possible to log out -Done
+
+docker
+update file created inside docker functionality missing
+
+create the courses page -Done
+set up app and databasemodel for categories and courses -Done 
+get courses from the database -Done
+get course details -Done
+do restriction on course -Done
+add link to user-account -Done
+
+create token and loging mechanism - Done
+encrypt and dycript token - Done
+
+
+Create Databse model for lessons -Done
+show lessions in a course -Done
+show detail page of a lessons -Done
+
+Create databse for lesson comments -Done
+create form for comments -Done
+show comments -Done
+
+Add validation to the comments form - Done
+Add the comment to the list of comments - Done
+Convert the course list object to a component -Done
+show newes courses on the front page - Done
+Add thunbails to courses  - Remain
+
