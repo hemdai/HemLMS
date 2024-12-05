@@ -53,7 +53,7 @@
             </div>
           </div>
           <div class="column is-12 has-text-centered">
-            <a href="#" class="button is-info is-size-3 mt-6 mb-6"
+            <a href="/signup" class="button is-info is-size-3 mt-6 mb-6"
               >Click to get started</a
             >
           </div>
@@ -89,6 +89,7 @@ export default {
     CourseItemView,
   },
   mounted() {
+    document.title = "Home - LMS";
     axios
       .get("courses/get-front-courses/")
       .then((response) => {

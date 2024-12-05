@@ -60,6 +60,9 @@ export default {
       errors: [],
     };
   },
+  mounted() {
+    document.title = "Login | HemLMS";
+  },
   methods: {
     loginForm() {
       this.errors = [];

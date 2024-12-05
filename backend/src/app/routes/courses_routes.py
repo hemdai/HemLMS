@@ -3,6 +3,7 @@ from src.models import Course, LessonModel, CommentModel, Category
 from utils.base import SessionLocal
 from fastapi.routing import APIRouter
 from utils.swagger_configs import RouteTags
+from fastapi import Query
 
 course_router = APIRouter(tags=[RouteTags.COURSE])
 
@@ -11,9 +12,21 @@ session = SessionLocal()
 
 
 @course_router.get("/courses/")
-async def get_courses():
+async def get_courses(category_slug: str = Query(None)):
+    if category_slug:
+        courses = (
+            session.query(Course)
+            .filter(
+                Course.categories.any(Category.slug == category_slug),
+            )
+            .all()
+        )
+
+        session.close()
+        return [CourseSchema.from_orm(course) for course in courses]
     courses = session.query(Course).all()
     session.close()
+    print([CourseSchema.from_orm(course) for course in courses])
     return [CourseSchema.from_orm(course) for course in courses]
 
 
@@ -83,7 +96,7 @@ async def get_comments(slug: str, lesson_slug: str):
     return [CommentSchema.from_orm(comment) for comment in comments]
 
 
-@course_router.get("/categories/")
+@course_router.get("/categories")
 async def get_categories():
     categories = session.query(Category).all()
     session.close()

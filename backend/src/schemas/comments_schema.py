@@ -14,3 +14,8 @@ class CommentSchema(BaseSchema):
     course: Optional[CourseSchema]
     lesson: Optional[LessonSchema]
     account: Optional[AccountSchema]
+
+    class Config:
+        json_encoders = {
+            datetime: lambda dt: dt.strftime("%Y-%m-%d %H:%M:%S") if dt else None,
+        }

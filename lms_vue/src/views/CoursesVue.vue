@@ -13,10 +13,20 @@
               <p class="menu-label">Categories</p>
 
               <ul class="menu-list">
-                <li><a>English</a></li>
-                <li><a>French</a></li>
-                <li><a>German</a></li>
-                <li><a>Nepali</a></li>
+                <li
+                  v-bind:class="{ 'is-active': !activeCategory }"
+                  @click="setActiveCategory(null)"
+                >
+                  <a>All Courses</a>
+                </li>
+                <li
+                  v-for="category in categories"
+                  v-bind:key="category.id"
+                  @click="setActiveCategory(category)"
+                  :class="{ 'is-active': category.id == activeCategory }"
+                >
+                  <a>{{ category.title }}</a>
+                </li>
               </ul>
             </aside>
           </div>
@@ -70,21 +80,55 @@ export default {
   data() {
     return {
       courses: [],
+      categories: [],
+      activeCategory: null,
     };
   },
   components: {
     CourseItemView,
   },
-  mounted() {
-    axios
-      .get("courses/")
+  async mounted() {
+    document.title = "Courses - LMS";
+    await axios
+      .get("categories/")
       .then((response) => {
-        console.log(response.data);
-        this.courses = response.data;
+        this.categories = response.data;
       })
       .catch((error) => {
         console.log(error);
       });
+    this.getCourses();
+  },
+  methods: {
+    setActiveCategory(category) {
+      this.activeCategory = category;
+      this.getCourses();
+    },
+    getCategories() {
+      axios
+        .get("categories/")
+        .then((response) => {
+          this.categories = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    getCourses() {
+      let url = "courses/";
+      if (this.activeCategory) {
+        console.log("active category", this.activeCategory);
+        url += "?category_slug=" + this.activeCategory.slug;
+      }
+      axios
+        .get(url)
+        .then((response) => {
+          this.courses = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
 };
 </script>

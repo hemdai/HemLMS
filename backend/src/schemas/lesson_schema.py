@@ -13,3 +13,4 @@ class LessonSchema(BaseSchema):
     status: Optional[str]
     created_at: Optional[datetime]
     updated_at: Optional[datetime]
+    video_url: Optional[str]

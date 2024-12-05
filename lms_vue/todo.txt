@@ -51,3 +51,42 @@ Convert the course list object to a component -Done
 show newes courses on the front page - Done
 Add thunbails to courses  - Remain
 
+category search possibility -Done
+
+Work with the admin section
+    Fix plural name for categories
+    show more information for lessons
+    show comments
+    inline comments
+set the window title -Done
+update "Get started" button on the front page -Done
+lessons not listed on front page when signed out -Done
+categories not listed when signed out -Done
+courses not listen when signed out -Done
+course contents not showing when signed out -Done
+prevent loading data from course (when not signed in) -Done
+
+
+make admin page -Done
+add modal-Done
+
+Create Database model for quizes - Done
+register quize model for admin -Done 
+make a new schema for quizes - Done
+disable comments for quizes -Done
+
+
+Better dates on comments -Done
+Crete components for comments-Done
+create component for add comment -Done
+Create component for quiz - Done 
+Better api url base name - Done
+
+
+Embed youtube videos (WLl6tXFAAcw) -Done
+Start Progress tracking implementation - 
+    create new app
+    Database model
+    View
+    urls
+    check test data

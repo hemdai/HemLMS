@@ -33,6 +33,10 @@ class LessonModel(BaseModel):
     created_at = Column(DateTime, default=datetime.now)
     updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
     slug = Column(String, unique=True, nullable=True)
+    video_url = Column(String(100), nullable=True)
+
+    def __str__(self):
+        return self.title
 
 
 @event.listens_for(LessonModel, "before_insert")

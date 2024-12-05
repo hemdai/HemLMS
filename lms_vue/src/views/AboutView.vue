@@ -6,14 +6,15 @@
       </div>
     </div>
 
-    <section class="section">
-      THis is the about page
-    </section>
+    <section class="section">THis is the about page</section>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'AboutView'
-}
+  name: "AboutView",
+  mounted() {
+    document.title = "About- HEMLMS";
+  },
+};
 </script>

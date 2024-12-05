@@ -13,7 +13,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-from src.app import account_router, course_router
+from src.app import account_router, course_router, admin_router, quize_router
+from src.app.activity.rotues import activity_router
 
 app.include_router(router=account_router, prefix="/api/v1")
 app.include_router(router=course_router, prefix="/api/v1")
+app.include_router(router=admin_router, prefix="/api/v1")
+app.include_router(router=quize_router, prefix="/api/v1")
+app.include_router(router=activity_router, prefix="/api/v1")

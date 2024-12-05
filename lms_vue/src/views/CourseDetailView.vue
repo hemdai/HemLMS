@@ -23,11 +23,21 @@
               <template v-if="activeLesson">
                 {{ activeLesson.long_description }}
                 <hr>
+                <template v-if="activeLesson.lesson_type === 'quiz'">
+                  <Quiz v-bind:quiz="quiz"></Quiz>
+                </template>
 
-                <article 
+                <template v-if="activeLesson.lesson_type === 'video'">
+                  <VideoView v-bind:youtube_id="activeLesson.video_url"></VideoView>
+                </template>
+
+               <!-- Comment box start here   -->
+               <template v-else-if="activeLesson.lesson_type === 'article' "> 
+                <CourseComment 
                   class="media box"
                   v-for="comment in comments"
                   v-bind:key="comment.id"
+                  v-bind:comment="comment"
                   >
                   <div class="media-content">
                     <div class="content">
@@ -39,33 +49,13 @@
                     </div>
                     </div>
 
-                </article>
-
-                <form v-on:submit.prevent="submitComment()">
-                  <div class="field">
-                    <label class="label">Name</label>
-                    <div class="control">
-                      <input class="input" type="text" placeholder="Name" v-model="comment.name">
-                    </div>
-
-                  </div>
-
-                  <div class="field">
-                    <label class="label">Content</label>
-                    <div class="control">
-                      <textarea class="textarea" v-model="comment.content"></textarea>
-                    </div>
-                  </div>
-                  <div class="notification is-danger" v-if="errors.length">
-                    <p v-for="error in errors" v-bind:key="error">{{ error }}</p>
-                  </div>
-                  <div class="field">
-                    <div class="control">
-                      <button class="button is-link">Submit</button>
-                    </div>
-                  </div>
-
-                </form>
+                </CourseComment>
+                <AddComments v-bind:course="course_detail"
+                v-bind:active-lesson="activeLesson"
+                v-on:submitComment="submitComment">
+                </AddComments>
+              </template>
+              <!-- fin du comment box -->
               </template v-else>
               {{ course_detail.long_description }}
             </template>
@@ -83,24 +73,35 @@
 </template>
 
 <script>
+import CourseComment from "@/components/CourseComment.vue";
+import AddComments from "@/components/AddComments.vue";
+import Quiz from "@/components/Quiz.vue";
+import VideoView from "@/components/VideoView.vue";
 import axios from "axios";
 export default {
+  components: {
+    CourseComment,
+    AddComments,
+    Quiz,
+    VideoView
+  },
   data() {
     return {
       course_detail: {},
       lessons: [],
       comments: [],
       activeLesson: null,
-      errors : [],
+      errors: [],
+      quiz: {},
       comment: {
         name: "",
         content: "",
       }
     };
   },
-  mounted() {
+  async mounted() {
     const slug = this.$route.params.slug;
-    axios
+    await axios
       .get(`courses/${slug}`)
       .then((response) => {
         console.log(response.data);
@@ -110,32 +111,36 @@ export default {
       .catch((error) => {
         console.log(error);
       });
+      document.title = this.course_detail.title + " -LMS";
   },
   methods: {
-    submitComment() {
-      this.errors = [];
-      if (!this.comment.name) {
-        this.errors.push("Name is required");
-      }
-      if (!this.comment.content) {
-        this.errors.push("Content is required");
-      }
-      if (!this.errors.length) {
-        axios
-              .post(`/courses/${this.course_detail.slug}/${this.activeLesson.slug}/comments`, this.comment)
-              .then((response) => {
-                this.comment.name = "";
-                this.comment.content = "";
-                this.comments.push(response.data);
-              })
-              .catch((error) => {
-                console.log(error);
-              });
-      }
+    submitComment(comment) {
+      this.comments.push(comment);
     },
      setActiveLesson(lesson) {
-    this.activeLesson = lesson;
-    this.getComments();
+       this.activeLesson = lesson
+       console.log(lesson.lesson_type, "the Lesson type");
+       if (lesson.lesson_type == "quiz") {
+      this.getQuiz();
+      
+    } else {
+      this.getComments();
+    }
+    
+    },
+    getQuiz() {
+      axios
+        .get(`/quizes/${this.course_detail.slug}/${this.activeLesson.slug}`)
+        .then((response) => {
+          if (response.data.length == 0) {
+            return
+          }
+          this.quiz = response.data[0];
+          this.selectedAnswer = "";
+        })
+        .catch((error) => {
+          console.log(error);
+        })
     },
   getComments() {
     axios
@@ -149,5 +154,5 @@ export default {
       });
   }
   },
-};
+}
 </script>

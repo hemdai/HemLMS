@@ -11,3 +11,4 @@ class CourseSchema(BaseSchema):
     long_description: Optional[str]
     categories: Optional[List[CategorySchema]]
     created_at: Optional[datetime]
+    course_image: str = "127.0.0.1:5000/"
