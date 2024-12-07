@@ -9,6 +9,7 @@ from pydantic import BaseModel
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
 from fastapi import Depends, HTTPException, status
+from sqlalchemy.exc import IntegrityError
 
 account_router = APIRouter(tags=[RouteTags.ACCOUNT])
 session = SessionLocal()
@@ -44,7 +45,7 @@ def authenticate_user(username: str, password: str):
     user = session.query(Account).filter(Account.username == username).first()
     if not user:
         return False
-    if not verify_password(password, user.password):
+    if not verify_password(plain_password=password, hashed_password=user.password):
         return False
     return user
 
@@ -126,22 +127,28 @@ async def root():
 
 @account_router.post("/signup")
 async def signup_view(data: AccountSchema):
-    new_data = data.copy()
     hashed_password = get_password_hash(data.password)
-    new_data.password = hashed_password
+    data.password = hashed_password
     session = SessionLocal()
-    account = Account(**dict(new_data))
-    session.add(account)
-    session.commit()
-    session.refresh(account)
-    session.close()
-    fresh_account = account
-    return {
-        "is_success": True,
-        "username": fresh_account.username,
-        "first_name": fresh_account.first_name,
-        "last_name": fresh_account.last_name,
-    }
+    try:
+        account = Account(**data.dict())
+        session.add(account)
+        session.commit()
+        session.refresh(account)
+        session.close()
+        fresh_account = account
+        return {
+            "is_success": True,
+            "username": fresh_account.username,
+            "first_name": fresh_account.first_name,
+            "last_name": fresh_account.last_name,
+        }
+    except IntegrityError as e:
+        session.rollback()
+        print("<<<<<<<<<<<<<<<<<<<<<<<<", e)
+        raise HTTPException(status_code=400, detail=str(e))
+    finally:
+        session.close()
 
 
 @account_router.post("/login")

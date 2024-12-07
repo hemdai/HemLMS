@@ -1,6 +1,8 @@
 registry = {}
 
 
-def register_admin(cls, schema, registry=registry):
-    registry[cls.__name__] = schema
-    return registry
+class AdminSite:
+    @classmethod
+    def register_admin(cls, model, schema, registry=registry):
+        registry[model.__name__] = schema
+        return registry

@@ -85,8 +85,8 @@ Better api url base name - Done
 
 Embed youtube videos (WLl6tXFAAcw) -Done
 Start Progress tracking implementation - 
-    create new app
-    Database model
+    create new app - Done
+    Database model - Done
     View
     urls
-    check test data
+    check test data 

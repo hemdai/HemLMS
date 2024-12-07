@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     postgres_db_name: str = SECRETS.get("POSTGRES_DB", "db_hemlms")
     postgres_db_user: str = SECRETS.get("POSTGRES_USER", "db_hemlms")
     postgres_db_password: str = SECRETS.get("POSTGRES_PASSWORD", "user_hemlms")
-    postgres_db_host: str = SECRETS.get("POSTGRES_HOST", "172.19.0.2")
+    postgres_db_host: str = SECRETS.get("POSTGRES_HOST", "postgres")
     postgres_db_port: int = SECRETS.get("POSTGRES_PORT", "5432")
     db_pool_size: int = 20
 

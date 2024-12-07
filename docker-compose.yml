@@ -1,7 +1,11 @@
 volumes:
   hemlms_data:
+networks:
+  hemlms_network:
 services:
   postgres:
+    networks:
+      - hemlms_network
     image: postgres
     volumes:
       - hemlms_data:/var/lib/postgresql/data
@@ -19,6 +23,8 @@ services:
     restart: on-failure
 
   api:
+    networks:
+      - hemlms_network
     restart: on-failure
     build:
       context: ./backend
@@ -33,6 +39,8 @@ services:
       - postgres
 
   frontend:
+    networks:
+      - hemlms_network
     restart: always
     build:
       context: ./lms_vue
