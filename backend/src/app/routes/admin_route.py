@@ -61,19 +61,25 @@ async def delete_record(table: str, id: int):
 
 @admin_router.put("/admin/tables/{table}/records/{id}")
 async def update_record(table: str, id: int, data: dict):
+    new_data = data.copy()
+    removing_keys = ["account", "categories"]
+    for key, value in data.items():
+        if key in removing_keys:
+            del new_data[key]
+        if key == "lesson_type":
+            new_data[key] = LessonTypeEnum(value)
+
+        if key == "lesson_status":
+            new_data[key] = LessonStatusEnum(value)
+    print(new_data, "the new_data is")
     module = importlib.import_module(f"src.models")
     schema = registry.get(table)
     ResolvedClass = getattr(module, table)
     session = SessionLocal()
     record = session.query(ResolvedClass).filter(ResolvedClass.id == id).first()
-    for key, value in data.items():
-        if key == "lesson_type":
-            value = LessonTypeEnum(value)
-
-        if key == "lesson_status":
-            value = LessonStatusEnum(value)
-
+    for key, value in new_data.items():
         setattr(record, key, value)
+    print(record, "the record is")
     session.commit()
     session.refresh(record)
     session.close()

@@ -1,9 +1,16 @@
-from src.schemas import CourseSchema, LessonSchema, CommentSchema, CategorySchema
-from src.models import Course, LessonModel, CommentModel, Category
+from src.schemas import (
+    CourseSchema,
+    LessonSchema,
+    CommentSchema,
+    CategorySchema,
+    AccountSchema,
+)
+from src.models import Course, LessonModel, CommentModel, Category, Account
 from utils.base import SessionLocal
 from fastapi.routing import APIRouter
 from utils.swagger_configs import RouteTags
-from fastapi import Query
+from fastapi import Query, Depends
+from src.app.routes.account_routes import get_current_user
 
 course_router = APIRouter(tags=[RouteTags.COURSE])
 
@@ -26,7 +33,6 @@ async def get_courses(category_slug: str = Query(None)):
         return [CourseSchema.from_orm(course) for course in courses]
     courses = session.query(Course).all()
     session.close()
-    print([CourseSchema.from_orm(course) for course in courses])
     return [CourseSchema.from_orm(course) for course in courses]
 
 
@@ -92,7 +98,6 @@ async def get_comments(slug: str, lesson_slug: str):
         .all()
     )
     session.close()
-    print([CommentSchema.from_orm(comment) for comment in comments])
     return [CommentSchema.from_orm(comment) for comment in comments]
 
 
@@ -101,3 +106,16 @@ async def get_categories():
     categories = session.query(Category).all()
     session.close()
     return [CategorySchema.from_orm(category) for category in categories]
+
+
+@course_router.get("/authors/courses/{account_id}")
+async def get_authors_courses(account_id: int):
+    session = SessionLocal()
+    account = session.query(Account).filter(Account.id == account_id).first()
+    courses = (
+        session.query(Course).filter(Course.account.has(Account.id == account.id)).all()
+    )
+    session.close()
+    courses_data = [CourseSchema.from_orm(course) for course in courses]
+    account_data = AccountSchema.from_orm(account)
+    return {"account": account_data, "courses_data": courses_data}

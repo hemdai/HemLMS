@@ -1,11 +1,10 @@
 from sqlalchemy.ext.declarative import declarative_base
-from typing import Any
+from typing import Any, Union
 from settings import SETTINGS
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.inspection import inspect
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import selectinload
+from sqlalchemy.exc import IntegrityError
+from fastapi import HTTPException
 
 BaseModel = declarative_base()
 
@@ -23,3 +22,28 @@ def get_db_session() -> Any:
         raise err
     finally:
         db_connection.close()
+
+
+def add_model_records(
+    model: Any,
+    data: Union[dict, Any],
+    session: SessionLocal = None,
+):
+    if not session:
+        session = SessionLocal()
+    try:
+        if isinstance(data, dict):
+            model_instance = model(**data)
+        else:
+            model_instance = data
+        session.add(model_instance)
+        session.commit()
+        session.refresh(model_instance)
+        session.close()
+        fresh_record = model_instance
+        return fresh_record
+    except IntegrityError as e:
+        session.rollback()
+        raise HTTPException(status_code=400, detail=str(e))
+    finally:
+        session.close()

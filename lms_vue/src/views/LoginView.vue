@@ -82,10 +82,10 @@ export default {
           .post("login/", formData)
           .then((response) => {
             console.log(response);
-            const token = response.data.auth_token;
+            const token = response.data.access_token;
             this.$store.commit("setUserName", response.data.first_name);
             this.$store.commit("setToken", token);
-            axios.defaults.headers.common["Authorization"] = "Token" + token;
+            axios.defaults.headers.common["Authorization"] = "Bearer " + token;
 
             localStorage.setItem("token", token);
 

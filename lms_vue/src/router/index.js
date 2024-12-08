@@ -7,6 +7,7 @@ import MyAccount from '../views/dashboard/MyAccount.vue'
 import CoursesVue from '@/views/CoursesVue.vue'
 import CourseDetailView from '@/views/CourseDetailView.vue'
 import BackofficeVue from '@/views/BackofficeVue.vue'
+import AuthorsView from '@/views/AuthorsView.vue'
 
 const routes = [
   {
@@ -47,6 +48,11 @@ const routes = [
     path: '/backoffice/',
     name: 'BackOffice',
     component: BackofficeVue
+  },
+  {
+    path: '/authors/courses/:id',
+    name: 'AuthorsView',
+    component: AuthorsView
   }
 ]
 

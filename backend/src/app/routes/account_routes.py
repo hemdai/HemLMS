@@ -1,4 +1,4 @@
-from utils.base import SessionLocal
+from utils.base import SessionLocal, add_model_records
 from src.models import Account
 from src.schemas import AccountSchema
 from fastapi.routing import APIRouter
@@ -9,7 +9,6 @@ from pydantic import BaseModel
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
 from fastapi import Depends, HTTPException, status
-from sqlalchemy.exc import IntegrityError
 
 account_router = APIRouter(tags=[RouteTags.ACCOUNT])
 session = SessionLocal()
@@ -96,7 +95,6 @@ async def get_current_active_user(current_user: Account = Depends(get_current_us
 
 @account_router.get("/token", response_model=Token)
 async def login_for_access_token(form_data: dict):
-    print(form_data)
     user = authenticate_user(form_data.username, form_data.password)
     if not user:
         raise HTTPException(
@@ -107,7 +105,7 @@ async def login_for_access_token(form_data: dict):
     access_token = create_access_token(
         data={"sub": user.username}, expires_delta=ACCESS_TOKEN_EXPIRE_MINUTES
     )
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {"access_token": access_token, "token_type": "Bearer"}
 
 
 @account_router.get("/me", response_model=AccountSchema)
@@ -129,26 +127,13 @@ async def root():
 async def signup_view(data: AccountSchema):
     hashed_password = get_password_hash(data.password)
     data.password = hashed_password
-    session = SessionLocal()
-    try:
-        account = Account(**data.dict())
-        session.add(account)
-        session.commit()
-        session.refresh(account)
-        session.close()
-        fresh_account = account
-        return {
-            "is_success": True,
-            "username": fresh_account.username,
-            "first_name": fresh_account.first_name,
-            "last_name": fresh_account.last_name,
-        }
-    except IntegrityError as e:
-        session.rollback()
-        print("<<<<<<<<<<<<<<<<<<<<<<<<", e)
-        raise HTTPException(status_code=400, detail=str(e))
-    finally:
-        session.close()
+    fresh_account = add_model_records(Account, data.dict())
+    return {
+        "is_success": True,
+        "username": fresh_account.username,
+        "first_name": fresh_account.first_name,
+        "last_name": fresh_account.last_name,
+    }
 
 
 @account_router.post("/login")
@@ -165,7 +150,7 @@ async def login_view(data: TokenData):
     )
     return {
         "access_token": access_token,
-        "token_type": "bearer",
+        "token_type": "Bearer",
         "first_name": user.first_name,
     }
 

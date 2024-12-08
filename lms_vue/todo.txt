@@ -84,9 +84,21 @@ Better api url base name - Done
 
 
 Embed youtube videos (WLl6tXFAAcw) -Done
-Start Progress tracking implementation - 
+Start Progress tracking implementation - Done
     create new app - Done
     Database model - Done
-    View
-    urls
-    check test data 
+    View -Done
+    urls -Done
+    check test data -Done
+
+Show active coures in my account -Done
+track lesson start -Done
+make it possible to mark lesson as Done -Done
+
+Add author to courses  -Done
+Author page -Done
+Link to author page -Done
+
+
+Begin working with making it possible
+for users to create courses

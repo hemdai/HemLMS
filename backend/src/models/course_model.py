@@ -12,6 +12,12 @@ class Course(BaseModel):
     short_description = Column(String(500))
     long_description = Column(String(1000))
     created_at = Column(DateTime, default=datetime.now)
+    created_by = Column(
+        Integer, ForeignKey("accounts.id", ondelete="CASCADE"), nullable=True
+    )
+    account = relationship(
+        "Account", backref="courses", lazy="joined", foreign_keys=[created_by]
+    )
     categories = relationship(
         "Category",
         secondary="course_categories",

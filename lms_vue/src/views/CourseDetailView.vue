@@ -2,7 +2,12 @@
   <div class="courses">
     <div class="hero is-info">
       <div class="hero-body has-text-centered">
-        <h1 class="title">The Title of the Course</h1>
+        <h1 class="title">{{ course_detail.title }}</h1>
+        <router-link 
+        :to="{name: 'AuthorsView', params: { id: course_detail.account.id }}"
+        class="subtitle"
+        >
+          By {{ course_detail.account.first_name + ' ' + course_detail.account.last_name }}</router-link>
       </div>
     </div>
 
@@ -21,6 +26,10 @@
           <div class="column is-10">
             <template v-if="$store.state.user.isAuthenticated">
               <template v-if="activeLesson">
+                <h2>{{ activeLesson.title }}</h2>
+                <span class="tag is-warning" v-if="activity.status == 'started'" @click="trackDoneLesson">Started (Click to make Done)</span>
+                <span class="tag is-success" v-if="activity.status == 'done'">Completed</span>
+
                 {{ activeLesson.long_description }}
                 <hr>
                 <template v-if="activeLesson.lesson_type === 'quiz'">
@@ -87,12 +96,19 @@ export default {
   },
   data() {
     return {
-      course_detail: {},
+      course_detail: {
+        account: {
+          first_name: "",
+          last_name: "",
+          id: 0,
+        }
+      },
       lessons: [],
       comments: [],
       activeLesson: null,
       errors: [],
       quiz: {},
+      activity: {},
       comment: {
         name: "",
         content: "",
@@ -104,7 +120,7 @@ export default {
     await axios
       .get(`courses/${slug}`)
       .then((response) => {
-        console.log(response.data);
+        console.log(response.data, "the course Detail");
         this.course_detail = response.data.course_detail;
         this.lessons = response.data.lessons;
       })
@@ -121,12 +137,32 @@ export default {
        this.activeLesson = lesson
        console.log(lesson.lesson_type, "the Lesson type");
        if (lesson.lesson_type == "quiz") {
-      this.getQuiz();
+         this.getQuiz()
       
     } else {
       this.getComments();
     }
-    
+    this.trackStartedLesson();
+    },
+    trackStartedLesson() {
+      axios
+        .post(`/activity/track-started/${this.$route.params.slug}/${this.activeLesson.slug}/`)
+        .then((response) => {
+          this.activity = response.data
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+     trackDoneLesson() {
+      axios
+        .post(`/activity/track-completed/${this.$route.params.slug}/${this.activeLesson.slug}/`)
+        .then((response) => {
+          this.activity = response.data
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     getQuiz() {
       axios
