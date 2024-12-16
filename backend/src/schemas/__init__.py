@@ -5,11 +5,13 @@ __all__ = [
     "LessonSchema",
     "CommentSchema",
     "QuizeSchema",
+    "CreateCourseSchema",
+    "CreateLessonSchema",
 ]
 
 from .account_schemas import AccountSchema
 from .category_schema import CategorySchema
-from .course_schema import CourseSchema
-from .lesson_schema import LessonSchema
+from .course_schema import CourseSchema, CreateCourseSchema
+from .lesson_schema import LessonSchema, CreateLessonSchema
 from .comments_schema import CommentSchema
 from .quize_schemas import QuizeSchema

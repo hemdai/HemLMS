@@ -17,6 +17,7 @@ async def fetch_tables():
         "course_categories",
         "LessonTypeEnum",
         "LessonStatusEnum",
+        "CourseStatusEnum",
     ]
     new_model_list = list(set(model_list) - set(removing_tables))
     return {"tables": new_model_list}

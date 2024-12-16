@@ -5,6 +5,7 @@ from typing import Any
 
 class Settings(BaseSettings):
     SECRETS: dict[str, str] = {}
+    BASE_UPLOAD_DIR: str = "media"
     # Database
     postgres_db_name: str = SECRETS.get("POSTGRES_DB", "db_hemlms")
     postgres_db_user: str = SECRETS.get("POSTGRES_USER", "db_hemlms")

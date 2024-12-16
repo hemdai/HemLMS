@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI(
     title="HemLMS", version="1.0.0", swagger_ui_parameters={"tagsSorter": "alpha"}
@@ -21,3 +22,6 @@ app.include_router(router=course_router, prefix="/api/v1")
 app.include_router(router=admin_router, prefix="/api/v1")
 app.include_router(router=quize_router, prefix="/api/v1")
 app.include_router(router=activity_router, prefix="/api/v1")
+
+# Static Files
+app.mount("/media", StaticFiles(directory="media"), name="media")

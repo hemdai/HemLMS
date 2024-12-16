@@ -1,7 +1,17 @@
 from src.models.base_model import BaseModel
-from sqlalchemy import Column, String, Integer, DateTime, ForeignKey, Table
+from sqlalchemy import Column, String, Integer, DateTime, ForeignKey, Table, event
 from datetime import datetime
 from sqlalchemy.orm import relationship
+from utils.event_tools import generate_unique_slug
+from enum import Enum
+from sqlalchemy import Enum as SQLAlchemyEnum
+
+
+class CourseStatusEnum(Enum):
+    draft = "draft"
+    published = "published"
+    archived = "archived"
+    in_review = "in_review"
 
 
 class Course(BaseModel):
@@ -24,6 +34,8 @@ class Course(BaseModel):
         back_populates="courses",
         lazy="joined",
     )
+    status = Column(SQLAlchemyEnum(CourseStatusEnum), default=CourseStatusEnum.draft)
+    image_path = Column(String(200), nullable=True)
 
 
 course_categories = Table(
@@ -32,3 +44,11 @@ course_categories = Table(
     Column("course_id", Integer, ForeignKey("courses.id"), primary_key=True),
     Column("category_id", Integer, ForeignKey("categories.id"), primary_key=True),
 )
+
+
+@event.listens_for(Course, "before_insert")
+def make_slug(maper, connection, target):
+    if target.title and not target.slug:
+        target.slug = generate_unique_slug(
+            cls=Course, target_word=target.title, connection=connection
+        )

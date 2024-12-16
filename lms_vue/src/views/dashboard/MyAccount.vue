@@ -23,6 +23,24 @@
 
         <!-- fin de column -->
       </div>
+
+      <div class="columns is-multiline">
+        <div class="column is-12">
+          <h2 class="subtitle is-size-3">Courses By You</h2>
+        </div>
+
+        <div
+          class="column is-4"
+          v-for="authorCourse in authorCourses"
+          v-bind:key="authorCourse.id"
+        >
+          <!-- plce pour card item -->
+          <AuthorsCourseView :authorCourse="authorCourse" />
+        </div>
+
+        <!-- fin de column -->
+      </div>
+
       <button @click="logout()" class="button is-danger">Log Out</button>
     </section>
   </div>
@@ -31,15 +49,18 @@
 <script>
 import axios from "axios";
 import CourseItemView from "../CourseItemView.vue";
+import AuthorsCourseView from "../AuthorsCourseView.vue";
 
 export default {
   data() {
     return {
       courses: [],
+      authorCourses: [],
     };
   },
   components: {
     CourseItemView,
+    AuthorsCourseView,
   },
   mounted() {
     axios
@@ -50,8 +71,21 @@ export default {
       .catch((error) => {
         console.log(error);
       });
+
+    this.getAuthorsCourse();
   },
   methods: {
+    getAuthorsCourse() {
+      axios
+        .get(`authors/courses/`)
+        .then((response) => {
+          this.authorCourses = response.data;
+          console.log("authors courses", this.authorCourses);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     async logout() {
       console.log("logout");
       await axios.get("logout/").then((response) => {

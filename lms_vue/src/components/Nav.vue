@@ -23,6 +23,15 @@
                 class="button is-primary"
                 >{{ $store.state.user.first_name }}</router-link
               >
+              <router-link to="/dashboard/my-account" class="button is-info">
+                My Account
+              </router-link>
+              <router-link
+                to="/dashboard/create-course"
+                class="button is-primary"
+              >
+                Create Course</router-link
+              >
             </template>
             <template v-else>
               <a href="/signup" class="button is-primary">

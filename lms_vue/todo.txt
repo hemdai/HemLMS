@@ -101,4 +101,14 @@ Link to author page -Done
 
 
 Begin working with making it possible
-for users to create courses
+for users to create courses -Done
+
+Add status to the courses (draft, in review, published) -Done
+Add button for saving as draft, and button for sending to review -Done
+Begin working with adding lessons 
+
+
+static file in backend to serve files -Done
+file saving and serving mechanisim upon its type -Done
+image uploading front end setup -Done
+image global access -Done

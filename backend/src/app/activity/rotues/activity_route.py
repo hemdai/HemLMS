@@ -1,6 +1,6 @@
 from fastapi.routing import APIRouter
 from utils.swagger_configs import RouteTags
-from utils.base import SessionLocal, add_model_records
+from utils.base import SessionLocal
 from src.models import ActivityModel, Account, Course, LessonModel
 from src.schemas import CourseSchema
 from src.app.activity.schemas import ActivitySchema
@@ -10,6 +10,7 @@ from fastapi import Depends
 from src.app.routes.account_routes import get_current_user
 from sqlalchemy.exc import IntegrityError
 from fastapi import HTTPException
+from utils.db_tools import add_model_records
 
 activity_router = APIRouter(tags=[RouteTags.ACTIVITY])
 session = SessionLocal()

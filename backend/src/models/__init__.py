@@ -2,6 +2,7 @@ __all__ = [
     "BaseModel",
     "Account",
     "Category",
+    "CourseStatusEnum",
     "Course",
     "course_categories",
     "LessonModel",
@@ -15,7 +16,7 @@ __all__ = [
 from src.models.base_model import BaseModel
 from src.models.account_model import Account
 from src.models.category_model import Category
-from src.models.course_model import Course, course_categories
+from src.models.course_model import Course, course_categories, CourseStatusEnum
 from src.models.lessons_model import LessonModel, LessonTypeEnum, LessonStatusEnum
 from src.models.comments_model import CommentModel
 from src.models.quiz_model import QuizModel

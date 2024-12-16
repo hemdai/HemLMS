@@ -8,6 +8,7 @@ import CoursesVue from '@/views/CoursesVue.vue'
 import CourseDetailView from '@/views/CourseDetailView.vue'
 import BackofficeVue from '@/views/BackofficeVue.vue'
 import AuthorsView from '@/views/AuthorsView.vue'
+import CreateCourse from '@/views/dashboard/CreateCourse.vue'
 
 const routes = [
   {
@@ -35,6 +36,11 @@ const routes = [
     component: MyAccount
   },
   {
+    path: '/dashboard/create-course',
+    name: 'CreateCourse',
+    component: CreateCourse
+  },
+  {
     path: '/courses',
     name: 'CoursesVue',
     component: CoursesVue
@@ -54,6 +60,7 @@ const routes = [
     name: 'AuthorsView',
     component: AuthorsView
   }
+
 ]
 
 const router = createRouter({

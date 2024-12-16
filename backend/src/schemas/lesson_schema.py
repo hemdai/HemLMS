@@ -14,3 +14,10 @@ class LessonSchema(BaseSchema):
     created_at: Optional[datetime]
     updated_at: Optional[datetime]
     video_url: Optional[str]
+
+
+class CreateLessonSchema(BaseSchema):
+    title: str
+    short_description: Optional[str]
+    long_description: Optional[str]
+    video_url: Optional[str]

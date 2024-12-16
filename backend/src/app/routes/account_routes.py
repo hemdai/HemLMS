@@ -1,4 +1,5 @@
-from utils.base import SessionLocal, add_model_records
+from utils.base import SessionLocal
+from utils.db_tools import add_model_records
 from src.models import Account
 from src.schemas import AccountSchema
 from fastapi.routing import APIRouter

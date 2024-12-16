@@ -3,6 +3,8 @@ from datetime import datetime
 from src.schemas.common import BaseSchema
 from src.schemas.account_schemas import AccountSchema
 from src.schemas.category_schema import CategorySchema
+from src.models import CourseStatusEnum
+from src.schemas.lesson_schema import CreateLessonSchema
 
 
 class CourseSchema(BaseSchema):
@@ -10,8 +12,18 @@ class CourseSchema(BaseSchema):
     slug: Optional[str]
     short_description: Optional[str]
     long_description: Optional[str]
-    categories: Optional[List[CategorySchema]]
+    status: Optional[CourseStatusEnum]
     created_at: Optional[datetime]
     course_image: str = "127.0.0.1:5000/"
-    account: Optional[AccountSchema]
     created_by: Optional[int]
+    account: Optional[AccountSchema]
+    categories: Optional[List[CategorySchema]]
+
+
+class CreateCourseSchema(BaseSchema):
+    title: str
+    short_description: Optional[str]
+    long_description: Optional[str]
+    categories: Optional[List[int]]
+    status: Optional[CourseStatusEnum]
+    lessons: Optional[List[CreateLessonSchema]]
