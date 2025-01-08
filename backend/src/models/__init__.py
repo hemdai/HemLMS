@@ -11,6 +11,7 @@ __all__ = [
     "LessonTypeEnum",
     "LessonStatusEnum",
     "ActivityModel",
+    "MetaModel",
 ]
 
 from src.models.base_model import BaseModel
@@ -21,3 +22,4 @@ from src.models.lessons_model import LessonModel, LessonTypeEnum, LessonStatusEn
 from src.models.comments_model import CommentModel
 from src.models.quiz_model import QuizModel
 from src.app.activity.model import ActivityModel
+from src.models.meta_model import MetaModel

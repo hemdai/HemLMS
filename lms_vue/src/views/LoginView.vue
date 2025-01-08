@@ -41,6 +41,8 @@
             </form>
 
             <hr />
+            <button @click="loginWithGoogle">Login with Google</button>
+            <hr />
             Dont have an account? No problem,
             <RouterLink to="/signup">Click here to Sign Up</RouterLink>
           </div>
@@ -49,7 +51,6 @@
     </section>
   </div>
 </template>
-
 <script>
 import axios from "axios";
 export default {
@@ -95,6 +96,10 @@ export default {
             console.log(error.response);
           });
       }
+    },
+    loginWithGoogle() {
+      const authUrl = "http://localhost:5000/auth/login";
+      window.location.href = authUrl;
     },
   },
 };

@@ -12,11 +12,11 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_USER=db_hemlms
-      - POSTGRES_PASSWORD=user_hemlms
-      - POSTGRES_DB=db_hemlms
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U db_hemlms -d db_hemlms"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 10s
       retries: 5
       start_period: 5s

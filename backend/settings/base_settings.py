@@ -1,6 +1,10 @@
 from pydantic_settings import BaseSettings
 from pydantic import PostgresDsn
 from typing import Any
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 
 class Settings(BaseSettings):
@@ -13,6 +17,9 @@ class Settings(BaseSettings):
     postgres_db_host: str = SECRETS.get("POSTGRES_HOST", "postgres")
     postgres_db_port: int = SECRETS.get("POSTGRES_PORT", "5432")
     db_pool_size: int = 20
+    secret_key: str = os.getenv("SECRET_KEY")
+    algorithm: str = os.getenv("ALGORITHM")
+    access_token_expire_minutes: int = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES")
 
     @property
     def db_url(self) -> Any:

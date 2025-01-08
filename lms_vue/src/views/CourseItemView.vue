@@ -3,7 +3,7 @@
     <div class="card-image">
       <figure class="image is-4by3">
         <img
-          src="https://bulma.io/assets/images/placeholders/128x128.png"
+          :src="$config.STATIC_PATH + course.image_path"
           alt="Placeholder image"
         />
       </figure>

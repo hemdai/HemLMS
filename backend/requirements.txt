@@ -46,3 +46,4 @@ traitlets==5.14.1
 typing_extensions==4.10.0
 uvicorn==0.27.1
 wcwidth==0.2.13
+python-dotenv==1.0.1

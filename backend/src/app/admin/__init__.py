@@ -7,6 +7,7 @@ from src.models import (
     CommentModel,
     QuizModel,
 )
+from src.models.meta_model import MetaModel
 from src.schemas import (
     CourseSchema,
     LessonSchema,
@@ -14,6 +15,7 @@ from src.schemas import (
     AccountSchema,
     CommentSchema,
     QuizeSchema,
+    MetaSchema,
 )
 from src.app.activity.model import ActivityModel
 from src.app.activity.schemas import ActivitySchema
@@ -25,3 +27,4 @@ AdminSite.register_admin(ActivityModel, ActivitySchema)
 AdminSite.register_admin(Account, AccountSchema)
 AdminSite.register_admin(CommentModel, CommentSchema)
 AdminSite.register_admin(QuizModel, QuizeSchema)
+AdminSite.register_admin(MetaModel, MetaSchema)

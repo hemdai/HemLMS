@@ -28,7 +28,7 @@
 
         <div>
           <label class="label">Course Picture Upload</label>
-            <UploadDocument ref="uploadDocument" :documentType="courseImage" ></UploadDocument>
+            <UploadDocument documentType="courseImage" @fileUploaded="onFileUploaded"></UploadDocument>
             <hr>
         </div>
 
@@ -124,6 +124,8 @@ export default {
         long_description: "",
         status: "",
         lessons: [],
+        image_path: "",
+        image_uuid: "",
       },
       categories: [],
     };
@@ -132,6 +134,10 @@ export default {
     this.getCategories();
   },
   methods: {
+    onFileUploaded(uploadObject) {
+      this.form.image_path = uploadObject.path
+      this.form.image_uuid = uploadObject.id
+    },
     getCategories() {
       axios
         .get("categories/")
@@ -149,8 +155,6 @@ export default {
       axios
         .post("create/courses", this.form)
         .then((response) => {
-          const createdCourse = response.data;
-          this.$refs.uploadDocument.uploadDocument(createdCourse.slug);
           this.$router.push("/dashboard/my-courses");
         })
         .catch((error) => {

@@ -14,7 +14,7 @@ class CourseSchema(BaseSchema):
     long_description: Optional[str]
     status: Optional[CourseStatusEnum]
     created_at: Optional[datetime]
-    course_image: str = "127.0.0.1:5000/"
+    image_path: Optional[str]
     created_by: Optional[int]
     account: Optional[AccountSchema]
     categories: Optional[List[CategorySchema]]
@@ -27,3 +27,5 @@ class CreateCourseSchema(BaseSchema):
     categories: Optional[List[int]]
     status: Optional[CourseStatusEnum]
     lessons: Optional[List[CreateLessonSchema]]
+    image_path: Optional[str]
+    image_uuid: Optional[str]

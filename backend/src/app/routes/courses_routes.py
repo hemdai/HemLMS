@@ -14,6 +14,7 @@ from src.models import (
     Account,
     CourseStatusEnum,
 )
+from src.models.meta_model import MetaModel
 from utils.base import SessionLocal
 from fastapi.routing import APIRouter
 from utils.swagger_configs import RouteTags
@@ -170,6 +171,7 @@ async def create_courses(
         categories=categories,
         created_by=account.id,
         status=data.status,
+        image_path=data.image_path,
     )
     course_model, session = add_model_records(
         Course, course, session=session, sesson_close=False
@@ -188,11 +190,17 @@ async def create_courses(
         lesson_list_model, session = add_model_records(
             LessonModel, lesson_list, session=session, sesson_close=False
         )
+    # update metamodels
+    meta_model = (
+        session.query(MetaModel).filter(MetaModel.uuid == data.image_uuid).first()
+    )
+    if meta_model:
+        meta_model.course_id = course.id
+        session.commit()
 
-    session.refresh(course_model)
     session.close()
 
-    return CourseSchema.from_orm(course)
+    return CourseSchema.from_orm(course_model)
 
 
 @course_router.post("/create-course-with-lessons")
@@ -244,14 +252,19 @@ async def create_course_with_lessons(
     return CourseSchema.from_orm(course)
 
 
-@course_router.post("/course/images/{slug}")
-async def upload_course_images(slug: str, file: UploadFile):
+@course_router.post("/course/images/{uuid}")
+async def upload_course_images(uuid: str, file: UploadFile):
     saving_path = save_file(file=file, document_type="image")
     if not saving_path:
         raise HTTPException(status_code=400, detail="Failed to save file")
     session = SessionLocal()
-    course = session.query(Course).filter(Course.slug == slug).first()
-    course.image_path = saving_path
+    meta_model = MetaModel(
+        uuid=uuid,
+        path=saving_path,
+        meta_type="image",
+    )
+    session.add(meta_model)
     session.commit()
+    session.refresh(meta_model)
     session.close()
     return {"url": saving_path, "message": "File uploaded successfully"}

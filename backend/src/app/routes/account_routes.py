@@ -10,13 +10,14 @@ from pydantic import BaseModel
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
 from fastapi import Depends, HTTPException, status
+from settings import SETTINGS
 
 account_router = APIRouter(tags=[RouteTags.ACCOUNT])
 session = SessionLocal()
 
-SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 3000
+SECRET_KEY = SETTINGS.secret_key
+ALGORITHM = SETTINGS.algorithm
+ACCESS_TOKEN_EXPIRE_MINUTES = SETTINGS.access_token_expire_minutes
 
 
 class Token(BaseModel):

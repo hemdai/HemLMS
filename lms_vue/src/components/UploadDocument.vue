@@ -42,20 +42,23 @@ export default {
     onFileChange(event) {
       this.selectedFile = event.target.files[0];
     },
-    getUrl(slug) {
-      return this.url[this.documentType] + "/" + slug;
+    getUrl(uuid) {
+      return this.url[this.documentType] + "/" + uuid;
     },
-    async uploadFile(slug) {
+    async uploadFile() {
       if (!this.selectedFile) {
         alert("Please select a file");
         return;
       }
+      const uuid = crypto.randomUUID();
       const formData = new FormData();
       formData.append("file", this.selectedFile);
       try {
-        const response = await axios.post(this.getUrl(slug), formData);
+        const response = await axios.post(this.getUrl(uuid), formData);
         this.uploadedFileUrl = response.data.url; // Save the returned URL
         console.log("File uploaded successfully:", response.data.url);
+
+        this.$emit("fileUploaded", { id: uuid, path: this.uploadedFileUrl });
       } catch (error) {
         console.error("Error uploading file:", error);
       }
