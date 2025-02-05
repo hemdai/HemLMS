@@ -25,6 +25,7 @@ from sqlalchemy.exc import IntegrityError
 from fastapi import HTTPException
 from utils.db_tools import add_model_records
 from utils.base import save_file
+from src.messages.producers import publish
 
 course_router = APIRouter(tags=[RouteTags.COURSE])
 

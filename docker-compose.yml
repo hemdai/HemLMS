@@ -1,12 +1,27 @@
 volumes:
   hemlms_data:
+  admin_app_data:
 networks:
   hemlms_network:
+    driver: bridge
+  app_admin_network:
+    driver: bridge
 services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq_hemlms
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+
   postgres:
     networks:
       - hemlms_network
     image: postgres
+    container_name: db_hemlms
     volumes:
       - hemlms_data:/var/lib/postgresql/data
     ports:
@@ -61,3 +76,42 @@ services:
     command: npm run serve
     depends_on:
       - api
+  
+  adminapp:
+    networks:
+      - app_admin_network
+    restart: on-failure
+    build:
+      context: ./adminapp
+      dockerfile: Dockerfile
+      target: adminapp-hemlms-build-stage
+    ports:
+      - "${ADMIN_APP_PORT}:${ADMIN_APP_PORT}"
+    volumes:
+      - ./adminapp:/adminapp
+    command: uvicorn src.app.main:app --reload --host 0.0.0.0 --port ${ADMIN_APP_PORT}
+    depends_on:
+      - admindb
+      - rabbitmq
+
+  admindb:
+    networks:
+      - app_admin_network
+    image: postgres
+    container_name: db_adminapp
+    volumes:
+      - admin_app_data:/var/lib/postgresql/data
+    ports:
+      - ${ADMIN_APP_DB_PORT}:5432
+    environment:
+      - POSTGRES_USER=${ADMIN_APP_POSTGRES_USER}
+      - POSTGRES_PASSWORD=${ADMIN_APP_POSTGRES_PASSWORD}
+      - POSTGRES_DB=${ADMIN_APP_POSTGRES_DB}
+      - POSTGRES_HOST=${ADMIN_APP_POSTGRES_HOST}
+      - POSTGRES_PORT=${ADMIN_APP_POSTGRES_PORT}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${ADMIN_APP_POSTGRES_USER} -d ${ADMIN_APP_POSTGRES_DB}"]
+      interval: 10s
+      retries: 5
+      start_period: 5s
+    restart: on-failure
