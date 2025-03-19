@@ -1,121 +1,100 @@
-# HemLMS
-This is Learning management System
-It is has been build in fastapi of python wiht alembic and sqlAlchemy for the backend, 
-while for the front-end I have choosen the Vue js.
-it has below functionality.
+# HemLMS - Learning Management System 📚
 
-Backend Fastapi, alembic, pydantic, setup 
-docker setup 
-frontend vue.js,libraries setup 
-docker setup 
-database setup and docker 
+HemLMS is a **Learning Management System (LMS)** designed to provide a seamless experience for both learners and instructors. This system enables course creation, user authentication, progress tracking, and more, while being efficiently containerized with **Docker** and integrated with a **message broker system (RabbitMQ)**.
 
-backend
-model account 
-schema account 
-api login-page 
-    databse query
-    databse validation
-    return value 
-    
-frontend
-homepage 
-aboutpage 
-ligin page 
-signup page 
+## 🚀 Tech Stack
 
-set up vuex store 
-initialize vuex on start up 
-Create very basic my account page 
-make it possible to log out 
+### **Backend:**
 
-docker
-update file created inside docker functionality missing
+- **Framework:** FastAPI ⚡ (Python)
+- **Database ORM:** SQLAlchemy 🐍
+- **Migrations:** Alembic 📜
+- **Validation:** Pydantic ✅
+- **Message Broker:** RabbitMQ 📩
+- **Authentication:** JWT Token with encryption & decryption 🔐
 
-create the courses page 
-set up app and databasemodel for categories and courses  
-get courses from the database 
-get course details 
-do restriction on course 
-add link to user-account 
+### **Frontend:**
 
-create token and loging mechanism - Done
-encrypt and dycript token - Done
+- **Framework:** Vue.js 🌿
+- **State Management:** Vuex ⚙️
+- **UI Libraries:** Bulma with Vue-based components 🎨
 
+### **Containerization & Deployment:**
 
-Create Databse model for lessons 
-show lessions in a course 
-show detail page of a lessons 
+- **Docker** 🐳 (Backend, Frontend, Database)
+- **Database:** PostgreSQL / MySQL 🗄️
 
-Create databse for lesson comments 
-create form for comments 
-show comments 
+## 🔧 Features & Functionalities
 
-Add validation to the comments form - Done
-Add the comment to the list of comments - Done
-Convert the course list object to a component 
-show newes courses on the front page - Done
-Add thunbails to courses  - Remain
+### ✅ **Backend Features**
 
-category search possibility 
+- **User Authentication:** Login, Signup, JWT-based authentication
+- **Account Management:** Models & schemas for user accounts
+- **Course Management:** Create, update, delete courses
+- **Lesson Management:** CRUD for lessons & content display
+- **Comments & Reviews:** Users can add, validate, and view comments
+- **Quiz System:** Structured quizzes, user participation, and results tracking
+- **Progress Tracking:** Monitor lesson completion, track user engagement
+- **File Uploads:** Support for images and other static files
+- **Message Broker:** RabbitMQ for handling async operations
 
-Work with the admin section
-    Fix plural name for categories
-    show more information for lessons
-    show comments
-    inline comments
-set the window title 
-update "Get started" button on the front page 
-lessons not listed on front page when signed out 
-categories not listed when signed out 
-courses not listen when signed out 
-course contents not showing when signed out 
-prevent loading data from course (when not signed in) 
+### ✅ **Frontend Features**
 
+- **Homepage & About Page:** Landing pages with course highlights
+- **Authentication Pages:** Login & Signup with JWT token handling
+- **User Dashboard:** My Account, active courses, tracking progress
+- **Course & Lesson Pages:** Detailed course view, embedded videos, and quizzes
+- **Admin Section:** Manage categories, courses, lessons, and user interactions
+- **Search & Filtering:** Category search for easy course discovery
 
-make admin page 
-add modal
+## 🏗️ Setup & Installation
 
-Create Database model for quizes - Done
-register quize model for admin  
-make a new schema for quizes - Done
-disable comments for quizes 
+### **Clone the Repository**
 
+```sh
+git clone https://github.com/hemdai/HemLMS.git
+cd hemlms
+```
 
-Better dates on comments 
-Crete components for comments
-create component for add comment 
-Create component for quiz - Done 
-Better api url base name - Done
+### Contact me for environment varriable hemanta.adhikari86@gmail.com or you can add yourself also
 
+### **Run Entire Application (Dockerized)**
 
-Embed youtube videos (WLl6tXFAAcw) 
-Start Progress tracking implementation - Done
-    create new app - Done
-    Database model - Done
-    View 
-    urls 
-    check test data 
+```sh
+docker-compose up --build
+```
 
-Show active coures in my account 
-track lesson start 
-make it possible to mark lesson  
+## 🛠️ Development Roadmap
 
-Add author to courses  
-Author page 
-Link to author page 
+### 🔹 **Completed Tasks**
 
+- User authentication with JWT ✅
+- Course & Lesson Management ✅
+- Commenting & Validation ✅
+- Quiz system implementation ✅
+- Progress tracking ✅
+- Video embedding & file serving ✅
 
-Begin working with making it possible
-for users to create courses 
+### 🔸 **Upcoming Features**
 
-Add status to the courses (draft, in review, published) 
-Add button for saving as draft, and button for sending to review 
-Begin working with adding lessons 
+- Implementing **user-generated courses** (draft/review/published)
+- Improving admin dashboard & moderation tools
+- Enhancing UI with better state management (Vuex)
+- Adding **category-based search & filtering**
 
+## 🤝 Contribution
 
-static file in backend to serve files 
-file saving and serving mechanisim upon its type 
-image uploading front end setup 
-image global access 
+Want to contribute? Follow these steps:
 
+1. Fork the repo 🍴
+2. Create a new branch for your feature 🔀
+3. Commit your changes ✅
+4. Open a Pull Request 🚀
+
+## 📜 License
+
+This project is licensed under the **MIT License**.
+
+---
+
+🚀 Stay tuned for more updates as we enhance HemLMS! 😊
